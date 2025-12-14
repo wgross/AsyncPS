@@ -62,3 +62,11 @@ public class MyPsCmdlet: AsyncPSCmdlet
 Stopping the PowerShell pipeline is either achieved by pressing Ctrl-C in the terminal or invoking `Powershell.Stop()` programmatically. in both cases the method `PSCmdlet.StopProcessing()`. 
 
 `AsyncPSCmdlet` implements `StopProcessing` by cancelling a  `CancellationTokenSource`. The sources `CancellationToken` is given to the `ProcessRecordAsync(CancellationToken)` when called. the async code can now be cancelled in a proper  async way.
+
+## References
+
+Question of viability in PowerShell discussions:
+https://github.com/PowerShell/PowerShell/discussions/26612#discussioncomment-15253209
+
+Much more complete implemenation:
+https://github.com/jborean93/PowerShell-OpenAuthenticode/blob/fd6dc1e4c329a826c5ee0a0b9b75c5ff103b3937/src/OpenAuthenticode/AsyncPSCmdlet.cs
