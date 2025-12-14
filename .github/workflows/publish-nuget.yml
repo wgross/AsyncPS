@@ -1,0 +1,29 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.x"
+      - name: Restore dependencies
+        run: dotnet restore src/AsyncPS/AsyncPS.csproj
+      - name: Build
+        run: dotnet build src/AsyncPS/AsyncPS.csproj --configuration Release --no-restore
+      - name: Pack
+        run: dotnet pack src/AsyncPS/AsyncPS.csproj --configuration Release --no-build --output ./nupkg
+      - name: Publish to NuGet
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkg
+          path: ./nupkg/*.nupkg
+      - name: Push to NuGet.org
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
